@@ -21,6 +21,6 @@ for pdb in "$@";do
     $SPARTAPLUS_BASE/sparta+ -in $1 -out ${1%.*}\.sparta_tmp &> /dev/null
     python2 $SCRIPTPATH/sparta+_to_star.py ${1%.*}\.sparta_tmp
     rm ${1%.*}\.sparta_tmp
-    rm struct.tab
+    #rm struct.tab
 done
 
