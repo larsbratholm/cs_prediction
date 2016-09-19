@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 if [[ -z $CAMSHIFT_BASE ]]; then
-    echo "lal"
     CAMSHIFT_BASE= # <path>/camshift-1.35/
 fi
 
