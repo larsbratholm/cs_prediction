@@ -1,9 +1,19 @@
 import sys
 import imp
 import inspect, os
+from contextlib import contextmanager
 
-def DummyFile():
-    def write(self, x): pass
+# from http://thesmithfam.org/blog/2012/10/25/temporarily-suppress-console-output-in-python/#
+@contextmanager
+def suppress_stdout():
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:  
+            yield
+        finally:
+            sys.stdout = old_stdout
+
 
 scriptpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
@@ -21,9 +31,10 @@ cheshift = imp.load_source('cheshift',cheshift_init_path)
 
 for pdb in sys.argv[1:]:
     basename = pdb.split("/")[-1].split(".")[0]
-    sys.stdout = DummyFile()
-    cmd.load(pdb)
-    cheshift.run()
+    with suppress_stdout():
+        cmd.load(pdb)
+        cheshift.run()
     os.system("python2 %s %s %s " %(scriptpath+"/cheshift_to_star.py", basename + ".txt", pdb))
     cmd.delete(basename)
+    os.system("rm %s" % basename + ".txt")
 cmd.quit()
