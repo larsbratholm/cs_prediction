@@ -2,7 +2,7 @@
 
 if [[ -z $SPARTAPLUS_BASE ]]; then
     echo "lal"
-    SPARTAPLUS_BASE= # <path>/camshift-1.35/
+    SPARTAPLUS_BASE= # <path>/SPARTA+/
 fi
 
 if [ "$#" -eq 0 ]; then
