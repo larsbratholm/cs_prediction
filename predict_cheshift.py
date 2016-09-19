@@ -1,6 +1,11 @@
 import sys
 import imp
-import os
+import inspect, os
+
+def DummyFile():
+    def write(self, x): pass
+
+scriptpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
 cheshift_init_path = '/home/lab/.pymol/startup/cheshift/__init__.py'
 if cheshift_init_path == "":
@@ -13,10 +18,12 @@ if len(sys.argv) == 1:
 
 cheshift = imp.load_source('cheshift',cheshift_init_path)
 
-for i in sys.argv[1:]:
-    basename = i.split("/")[-1].split(".")[0]
-    cmd.load(i)
+
+for pdb in sys.argv[1:]:
+    basename = pdb.split("/")[-1].split(".")[0]
+    sys.stdout = DummyFile()
+    cmd.load(pdb)
     cheshift.run()
-    os.system("mv %s %s" %(basename + ".txt", sys.argv[1]+".cheshift"))
+    os.system("python2 %s %s %s " %(scriptpath+"/cheshift_to_star.py", basename + ".txt", pdb))
     cmd.delete(basename)
 cmd.quit()
